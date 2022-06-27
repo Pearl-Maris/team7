@@ -6,8 +6,42 @@
     <RouterLink to="/about">
       About.
     </RouterLink>
+    <RouterLink
+      v-if="!login"
+      to="/login">
+      Login.
+    </RouterLink>
+    <RouterLink
+      v-if="!login"
+      to="/signup">
+      Signup.
+    </RouterLink>
+    <RouterLink to="/my-page">
+      My-Page.
+    </RouterLink>
+    <RouterLink
+      v-if="login"
+      to="/"
+      @click="logout">
+      Logout.
+    </RouterLink>
   </header>
 </template>
+
+<script>
+export default {
+  computed: {
+    login() {
+      return this.$store.state.auth.email
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('auth/logout')
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 header {
