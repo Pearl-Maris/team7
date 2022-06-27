@@ -9,6 +9,14 @@ export default {
     heropyMessage() {
       return this.$store.state.heropy.message
     }
+  },
+  created() {
+    this.validateToken()
+  },
+  methods: {
+    validateToken() {
+      this.$store.dispatch('auth/validateToken')
+    }
   }
 }
 </script>
