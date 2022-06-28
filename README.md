@@ -20,6 +20,14 @@ rmdir /s .git
 npm i
 ```
 
+```bash
+npm install axios
+```
+
+```bash
+npm install swiper
+```
+
 ## 개발 서버 시작
 
 ```bash
