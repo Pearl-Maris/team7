@@ -28,17 +28,13 @@
 export default {
   data() {
     return {
-      email: '',
-      password: ''
+      email: '123@123.com',
+      password: 'test123123'
     }
   },
   methods: {
     async login() {
-    const { email } = await this.$store.dispatch('auth/login', this.$data)
-    console.log(email)
-      if (email) {
-        this.$router.push('/')
-      }
+    await this.$store.dispatch('auth/login', this.$data)
     }
   }
 }
