@@ -42,8 +42,12 @@ export default {
 
   methods: {
     async edit() {
-      await this.$store.dispatch('auth/editUserInfo', this.$data)
-      this.$router.push('/my-page')
+      try {
+        await this.$store.dispatch('auth/editUserInfo', this.$data)
+        this.$router.push('/my-page')
+      }catch(error) {
+        console.log(error)
+      }
     }
   }
 }

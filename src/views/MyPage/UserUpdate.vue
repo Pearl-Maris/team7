@@ -45,14 +45,6 @@
 import { mapState } from 'vuex'
 
 export default {
-  // data(){
-  //   return {
-  //     email: '',
-  //     displayName: '',
-  //     profileImg: ''
-  //   }
-  // },
-
   computed: {
     ...mapState('auth', [
       'email',
