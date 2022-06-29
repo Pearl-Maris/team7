@@ -1,29 +1,24 @@
 import router from './index'
-// import { mapActions } from 'vuex'
 import store from '~/store'
 
-// export default {
-//   methods: {
-//     ...mapActions('~/store/auth', [
-//       'validateToken'
-//     ])
-//   }
-// }
-
 router.beforeEach(async to => {
-  console.log(to)
+  let userInfo = null
+  try {
+    userInfo = await store.dispatch('auth/validateToken')
+  } catch(error) {
+    console.log(error)
+  }
+
   if (to.meta.auth) {
-    const userInfo = await store.dispatch('auth/validateToken')
-    console.log(userInfo)
-    // if (userInfo.email === 'admin@kdt.com' && userInfo.displayName === 'admin') {
-    //   return '/admin'
-    // }
-    if (userInfo && userInfo.email) {
-      return true
-    } 
-      return '/login'
+    if (userInfo && userInfo.email === 'admin@kdt.com' && userInfo.displayName === 'admin') {
+      return '/admin'
     }
-  
+    if (!userInfo) {
+      return '/login'
+    } 
+  }
+  if (userInfo && to.fullPath.includes('/login')) {
+    return '/'
+  }
   return true
 })
-

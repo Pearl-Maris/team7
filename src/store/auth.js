@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { API_HEADERS, END_POINT } from './api'
+import router from '~/routes'
+import { API_HEADERS, END_POINT } from '~/api/api'
 
 export default {
   namespaced: true,
@@ -10,10 +11,8 @@ export default {
     profileImg: '',
     }
   },
-  getters: {
-
-  }, 
   mutations: {
+    // state 데이터 수정 (payload는 객체 데이터를 인수로 받음)
     setStates(state, payload) {
       for (const key in payload) {
         state[key] = payload[key]
@@ -21,7 +20,8 @@ export default {
     }
   },
   actions: {
-    async signup({ state, commit }, payload) {
+    // 회원가입
+    async signup({ commit }, payload) {
       
       const { email, password, displayName, profileImgBase64 } = payload
       try {
@@ -36,20 +36,19 @@ export default {
             profileImgBase64
           }
         })
-        console.log(userInfo)
         const { user, accessToken } = userInfo.data
         window.localStorage.setItem('accessToken', accessToken)
         commit('setStates', user)
-        console.log(state)
       }
       catch(error) {
         console.log(error)
         // alert(error.response.data)
       }
     },
+
+    // 로그인
     async login({ state, commit }, payload) {
       const { email, password } = payload
-      console.log(payload)
       try {
         const userInfo = await axios({
           url: `${END_POINT}/auth/login`,
@@ -60,11 +59,10 @@ export default {
             password
           }
         })
-        console.log(userInfo)
         const { user, accessToken } = userInfo.data
         commit('setStates', user)
-        console.log(state)
         window.localStorage.setItem('accessToken', accessToken)
+        router.push('/')
         return state
       }
       catch(error) {
@@ -72,7 +70,9 @@ export default {
         // alert(error.response.data)
       }
     },
-    async logout({ state, commit }) {
+
+    // 로그아웃
+    async logout({ commit }) {
       const accessToken = window.localStorage.getItem('accessToken')
       await axios({
         url: `${END_POINT}/auth/logout`,
@@ -84,27 +84,29 @@ export default {
         displayName: '',
         profileImg: '',
         })
-      console.log(state)
+      window.localStorage.removeItem('accessToken')
     },
-    async validateToken({ state, commit }) {
+
+    // 인증 확인 (토큰 확인)
+    async validateToken({ commit }) {
       const accessToken = window.localStorage.getItem('accessToken')
-      console.log(accessToken)
+      if (!accessToken) throw ''
       try {const userInfo = await axios({
         url: `${END_POINT}/auth/me`,
         method: 'POST',
         headers: {...API_HEADERS, Authorization: `Bearer ${accessToken}`}
       })
       commit('setStates', userInfo.data)
-      console.log(state)
       return userInfo.data
       } catch (error) {
         console.log(error)
       }
     },
-    async editUserInfo({ state, commit }, payload) {
+
+    // 회원정보 수정
+    async editUserInfo({ commit }, payload) {
       const accessToken = window.localStorage.getItem('accessToken')
       const { displayName, profileImgBase64, oldPassword,newPassword } = payload
-      console.log(payload)
       try {
         const userInfo = await axios({
           url: `${END_POINT}/auth/user`,
@@ -119,7 +121,6 @@ export default {
         })
         const { user } = userInfo.data
         commit('setStates', user)
-        console.log(state)
       }
       catch(error) {
         console.log(error)

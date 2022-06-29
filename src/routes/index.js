@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from './Home'
-import About from './About'
-import Login from './Login'
-import Signup from './Signup'
-import MyPage from './MyPage'
-import EditDisplayName from './EditDisplayName'
-import EditPassword from './EditPassword'
+import Home from '~/views/Home'
+import Login from '~/views/Login'
+import Signup from '~/views/Signup'
+import MyPage from '~/views/MyPage'
+import UserUpdate from '~/views/MyPage/UserUpdate'
+import UpdateDisplayName from '~/views/MyPage/UpdateDisplayName'
+import UpdatePassword from '~/views/MyPage/UpdatePassword'
+import Admin from '~/views/Admin'
 
 export default createRouter({
   history: createWebHistory(),
@@ -14,10 +15,6 @@ export default createRouter({
     {
       path: '/',
       component: Home
-    },
-    {
-      path: '/about',
-      component: About
     },
     {
       path: '/login',
@@ -31,20 +28,25 @@ export default createRouter({
       path: '/my-page',
       component: MyPage,
       meta: { auth: true },
+      redirect: '/my-page/update',
       children: [
         {
+          path: 'update',
+          component: UserUpdate
+        },
+        {
           path: 'edit-name',
-          component: EditDisplayName
+          component: UpdateDisplayName
         },
         {
           path: 'edit-password',
-          component: EditPassword
+          component: UpdatePassword
         }
       ]
     },
-    // {
-    //   path: '/:notFound(.*)*',
-    //   component: NotFound
-    // },
+    {
+      path: '/admin',
+      component: Admin
+    },
   ]
 })

@@ -4,7 +4,6 @@
   <form
     class="signupForm"
     @submit.prevent>
-    {{ displayName }}
     <div class="input-wraper">
       <div class="input-title">
         이름<span>*</span>
@@ -16,7 +15,6 @@
         maxlength="20"
         required />
     </div>
-    {{ email }}
     <div class="input-wraper">
       <div class="input-title">
         이메일<span>*</span>
@@ -33,22 +31,26 @@
         비밀번호<span>*</span>
       </div>
       <input
+        ref="password"
         v-model.trim="password"
         type="password"
         placeholder="비밀번호를 8자 이상 입력해 주세요."
         minlength="8"
-        required />
+        required
+        @change="confirmPassword" />
     </div>
-    <!-- <div class="input-wraper">
+    <div class="input-wraper">
       <div class="input-title">
         비밀번호 확인<span>*</span>
       </div>
       <input
-        type="text"
+        ref="confirm_password"
+        type="password"
         placeholder="비밀번호를 한번 더 입력하세요."
         minlength="8"
-        required />
-    </div> -->
+        required
+        @input="confirmPassword" />
+    </div>
     <div class="input-wraper">
       <div class="input-title">
         프로필
@@ -72,8 +74,6 @@
 </template>
 
 <script>
-// import { mapActions } from 'vuex'
-
 export default {
     data() {
     return {
@@ -83,18 +83,14 @@ export default {
       profileImgBase64: ''
     }
   },
-  // computed: {
-  //   ...mapState('auth', [
-
-  //   ])
-  // },
-
   methods: {
-    // ...mapActions([
-    //   'auth/signup'
-    // ]),
     async signup() {
       await this.$store.dispatch('auth/signup', this.$data)
+    },
+    confirmPassword(){
+      if(this.$refs.password.value !== this.$refs.confirm_password.value) {
+        this.$refs.confirm_password.setCustomValidity('비밀번호가 일치하지 않습니다.')
+      }
     },
     selectImage(event) {
       const { files } = event.target
