@@ -1,10 +1,14 @@
 import { createStore } from 'vuex'
-import heropy from './heropy'
 import auth from './auth'
+import account from './account'
+import admin from './admin'
+import customer from './customer'
 
 export default createStore({
   modules: {
-    heropy,
-    auth
+    auth,
+    account,
+    admin,
+    customer
   }
 })
